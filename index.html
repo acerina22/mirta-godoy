@@ -193,12 +193,15 @@ footer{padding-bottom:calc(84px + env(safe-area-inset-bottom,0px))!important}
 .v360 video{width:100%;height:auto;aspect-ratio:720/1280;object-fit:cover;border-radius:18px;border:2px solid var(--gold);background:#000;display:block}
 .v360 figcaption{font-size:13.5px;color:var(--muted);margin-top:8px}
 
-.gal{display:grid;grid-template-columns:repeat(2,1fr);gap:8px}
-@media (min-width:720px){.gal{grid-template-columns:repeat(3,1fr)}}
-.gal figure{margin:0;position:relative;border-radius:14px;overflow:hidden;background:#000;border:1px solid var(--line)}
-.gal img,.gal video{width:100%;aspect-ratio:4/5;object-fit:cover;display:block}
-.gal figcaption{position:absolute;left:0;right:0;bottom:0;padding:22px 10px 8px;font-size:12.5px;line-height:1.3;color:#F3E7D3;background:linear-gradient(transparent,rgba(0,0,0,.75));pointer-events:none}
-.gal figure.v figcaption{display:none}
+.gal-grp{margin-top:22px}
+.gal-grp h3{font:600 15px var(--body);letter-spacing:.08em;text-transform:uppercase;color:var(--gold-hi);margin:0 0 10px;display:flex;align-items:center;gap:10px}
+.gal-grp h3 small{font:500 13px var(--body);letter-spacing:0;text-transform:none;color:var(--muted)}
+.gal-row{display:flex;gap:12px;overflow-x:auto;scroll-snap-type:x mandatory;padding-bottom:10px;margin-right:calc(-1 * max(16px, env(safe-area-inset-right, 0px)));padding-right:max(16px, env(safe-area-inset-right, 0px));scrollbar-width:thin}
+.gal-row figure{flex:0 0 66%;max-width:260px;scroll-snap-align:start;margin:0;min-width:0}
+.gal-row video,.gal-row img{width:100%;aspect-ratio:9/14;object-fit:cover;display:block;border-radius:16px;background:#000;border:1px solid var(--line)}
+.gal-row figcaption{margin-top:8px;font-size:14px;line-height:1.35;color:var(--fg)}
+.gal-row figcaption span{display:block;font-size:12.5px;color:var(--muted)}
+.gal-cta{margin-top:22px;display:flex;justify-content:center}
 .links{margin:16px 0 0;font-size:14.5px;color:var(--muted)}
 .links a{color:var(--gold-hi)}
 </style>
@@ -249,6 +252,14 @@ footer{padding-bottom:calc(84px + env(safe-area-inset-bottom,0px))!important}
     </div>
   </section>
 
+  <section id="galeria" aria-labelledby="galT" hidden>
+    <span class="kick">Mirala en acción</span>
+    <h2 id="galT">Videos de sus shows</h2>
+    <p class="intro">De los festivales en Colombia a las milongas de Buenos Aires. Deslizá para ver más.</p>
+    <div id="gal"></div>
+    <div class="gal-cta"><a class="btn gold" href="#show">Quiero este show en mi evento</a></div>
+  </section>
+
   <section data-rv class="center" aria-labelledby="paraT">
     <div class="orn"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 2l2.2 7.8L22 12l-7.8 2.2L12 22l-2.2-7.8L2 12l7.8-2.2z"/></svg></div>
     <h2 id="paraT">Pasión, tradición y sentimiento para cada evento</h2>
@@ -277,12 +288,6 @@ footer{padding-bottom:calc(84px + env(safe-area-inset-bottom,0px))!important}
     </div>
   </section>
 
-  <section id="galeria" aria-labelledby="galT" hidden>
-    <span class="kick">De los últimos shows</span>
-    <h2 id="galT">Fotos y videos</h2>
-    <p class="intro">Así se viven los shows de Mirta.</p>
-    <div class="gal" id="gal"></div>
-  </section>
 
   <section data-rv id="agenda" aria-labelledby="agT">
     <span class="kick">Venite a verme</span>
@@ -423,18 +428,26 @@ if('IntersectionObserver' in window && !matchMedia('(prefers-reduced-motion: red
  rv.forEach(el=>{const r=el.getBoundingClientRect();if(r.top>innerHeight){el.classList.add('rv-wait');ro.observe(el)}});
 }
 
-// galería cargada desde el panel
+// galería cargada desde el panel, agrupada
 (async()=>{try{
  const U='https://syxhetsgfcfjdazyyfhv.supabase.co',K='sb_publishable_0BClC2xOaNPiR2dVjX59kg_MbBKtFRz';
- const r=await fetch(U+'/rest/v1/media?select=tipo,titulo,evento,ruta&order=orden.desc,creado.desc&limit=24',{headers:{apikey:K}});
+ const r=await fetch(U+'/rest/v1/media?select=tipo,titulo,evento,ruta&order=orden.desc,creado.asc&limit=60',{headers:{apikey:K}});
  if(!r.ok)return;const items=await r.json();if(!items.length)return;
- const g=$('gal');
- items.forEach(m=>{const f=document.createElement('figure');const src=U+'/storage/v1/object/public/eventos/'+m.ruta;
-  if(m.tipo==='video'){f.className='v';const v=document.createElement('video');v.src=src;v.controls=true;v.playsInline=true;v.preload='metadata';v.setAttribute('aria-label',m.titulo||m.evento||'Video del show');
-   v.addEventListener('play',()=>{if(!bgm.paused){bgm.pause();mb.setAttribute('aria-pressed','false');$('musicLbl').textContent='Música'}});f.append(v)}
-  else{const i=document.createElement('img');i.src=src;i.loading='lazy';i.alt=m.titulo||m.evento||'Foto del show';f.append(i)}
-  const c=m.titulo||m.evento;if(c){const fc=document.createElement('figcaption');fc.textContent=c;f.append(fc)}
-  g.append(f)});
+ // grupos: Colombia primero, después el resto
+ const grupos=[{t:'Gira por Colombia',d:'Festivales y escenarios',f:m=>/colombia|medell/i.test((m.evento||'')+' '+(m.titulo||''))},{t:'Shows y milongas',d:'Bares, cafecitos y fiestas',f:()=>true}];
+ const usados=new Set(),g=$('gal');
+ grupos.forEach(gr=>{const lista=items.filter(m=>!usados.has(m)&&gr.f(m));if(!lista.length)return;lista.forEach(m=>usados.add(m));
+  const box=document.createElement('div');box.className='gal-grp';
+  const h=document.createElement('h3');h.textContent=gr.t+' ';const sm=document.createElement('small');sm.textContent='· '+lista.length+(lista.length===1?' video':' videos');h.append(sm);
+  const row=document.createElement('div');row.className='gal-row';
+  lista.forEach(m=>{const f=document.createElement('figure');const src=U+'/storage/v1/object/public/eventos/'+m.ruta;
+   if(m.tipo==='video'){const v=document.createElement('video');v.src=src+'#t=0.5';v.controls=true;v.playsInline=true;v.preload='metadata';v.setAttribute('aria-label',m.titulo||m.evento||'Video del show');
+    v.addEventListener('play',()=>{row.querySelectorAll('video').forEach(o=>{if(o!==v)o.pause()});if(!bgm.paused){bgm.pause();mb.setAttribute('aria-pressed','false');$('musicLbl').textContent='Música'}});f.append(v)}
+   else{const i=document.createElement('img');i.src=src;i.loading='lazy';i.alt=m.titulo||m.evento||'Foto del show';f.append(i)}
+   const t=(m.titulo||'').trim(),e=(m.evento||'').trim();
+   if(t||e){const fc=document.createElement('figcaption');fc.textContent=t||e;if(t&&e&&!/colombia/i.test(e)){const sp=document.createElement('span');sp.textContent=e;fc.append(sp)}f.append(fc)}
+   row.append(f)});
+  box.append(h,row);g.append(box)});
  $('galeria').hidden=false;
 }catch(e){}})();
 </script>
