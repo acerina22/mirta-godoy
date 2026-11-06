@@ -193,6 +193,9 @@ footer{padding-bottom:calc(84px + env(safe-area-inset-bottom,0px))!important}
 .v360 video{width:100%;height:auto;aspect-ratio:720/1280;object-fit:cover;border-radius:18px;border:2px solid var(--gold);background:#000;display:block}
 .v360 figcaption{font-size:13.5px;color:var(--muted);margin-top:8px}
 
+.more{margin:16px auto 0;display:flex}
+.gig.later{display:none}.agenda.all .gig.later{display:flex}
+@media (max-width:719px){.music{bottom:auto;top:calc(14px + env(safe-area-inset-top,0px))}}
 .gal-grp{margin-top:22px}
 .gal-grp h3{font:600 15px var(--body);letter-spacing:.08em;text-transform:uppercase;color:var(--gold-hi);margin:0 0 10px;display:flex;align-items:center;gap:10px}
 .gal-grp h3 small{font:500 13px var(--body);letter-spacing:0;text-transform:none;color:var(--muted)}
@@ -207,7 +210,6 @@ footer{padding-bottom:calc(84px + env(safe-area-inset-bottom,0px))!important}
 </style>
 </head>
 <body>
-<div class="demo g"><b>Página en creación</b> · Estamos sumando videos de sus shows en vivo, para que veas cómo se vive la experiencia.</div>
 
 <header class="hero">
   <img src="media/hero_cate.jpg" alt="Mirta Godoy cantando, sonriente" width="814" height="1000">
@@ -216,7 +218,7 @@ footer{padding-bottom:calc(84px + env(safe-area-inset-bottom,0px))!important}
     <p class="name" aria-label="Mirta Godoy"><b>MIRTA</b><i>Godoy</i></p>
     <h1>¿Querés que tu fiesta de fin de año sea más divertida?</h1>
     <p>Contratá a Mirta Godoy para animar tu evento: fiestas de fin de año y eventos empresariales, y también cumpleaños y casamientos.</p>
-    <div class="ctas"><a class="btn gold" href="#show">Armá tu show</a><a class="btn line" href="#agenda">Dónde verme</a></div>
+    <div class="ctas"><a class="btn gold" href="#show">Armá tu show</a><a class="btn line" href="#t360">Mirala en acción</a></div>
   </div></div>
 </header>
 
@@ -230,14 +232,6 @@ footer{padding-bottom:calc(84px + env(safe-area-inset-bottom,0px))!important}
     </ul>
   </section>
 
-  <section data-rv id="envivo" aria-labelledby="vivoT">
-    <span class="kick">Escuchala antes de contratarla</span>
-    <h2 id="vivoT">Así suena en vivo</h2>
-    <div class="player">
-      <video src="media/envivo.mp4" poster="media/poster.jpg" controls playsinline preload="metadata" aria-label="Mirta Godoy cantando en vivo con guitarra"></video>
-    </div>
-    <p class="intro" style="margin-top:12px">Voz en vivo, con guitarra. Tocá play y subí el volumen.</p>
-  </section>
 
   <section data-rv aria-labelledby="t360">
     <div class="s360">
@@ -252,13 +246,6 @@ footer{padding-bottom:calc(84px + env(safe-area-inset-bottom,0px))!important}
     </div>
   </section>
 
-  <section id="galeria" aria-labelledby="galT" hidden>
-    <span class="kick">Mirala en acción</span>
-    <h2 id="galT">Videos de sus shows</h2>
-    <p class="intro">De los festivales en Colombia a las milongas de Buenos Aires. Deslizá para ver más.</p>
-    <div id="gal"></div>
-    <div class="gal-cta"><a class="btn gold" href="#show">Quiero este show en mi evento</a></div>
-  </section>
 
   <section data-rv class="center" aria-labelledby="paraT">
     <div class="orn"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 2l2.2 7.8L22 12l-7.8 2.2L12 22l-2.2-7.8L2 12l7.8-2.2z"/></svg></div>
@@ -266,6 +253,13 @@ footer{padding-bottom:calc(84px + env(safe-area-inset-bottom,0px))!important}
     <ul class="evs">
       <li>Fiestas de fin de año</li><li>Eventos empresariales</li><li>Cumpleaños</li><li>Casamientos</li><li>Aniversarios</li><li>Milongas y reuniones</li>
     </ul>
+  </section>
+
+  <section id="galeria" aria-labelledby="galT" hidden>
+    <span class="kick">Mirala en acción</span>
+    <h2 id="galT">Videos de sus shows</h2>
+    <p class="intro">De los festivales en Colombia a las milongas de Buenos Aires. Deslizá para ver más.</p>
+    <div id="gal"></div>
   </section>
 
   <section data-rv id="show" aria-labelledby="showT">
@@ -288,57 +282,6 @@ footer{padding-bottom:calc(84px + env(safe-area-inset-bottom,0px))!important}
     </div>
   </section>
 
-
-  <section data-rv id="agenda" aria-labelledby="agT">
-    <span class="kick">Venite a verme</span>
-    <h2 id="agT">Dónde canto</h2>
-    <p class="intro">Próximas fechas en vivo.</p>
-    <p class="next" id="nextGig" hidden></p>
-    <div class="agenda">
-      <article class="gig">
-        <img src="media/flyer_cate.jpg" alt="Flyer del After de La Cate" loading="lazy">
-        <div>
-          <span class="when">Viernes 6 de noviembre · 2 am</span>
-          <b>After de La Cate</b>
-          <span>Mirta canta, con Silvestre Moretta en guitarra.</span>
-          <span class="where">La Catedral Club · Sarmiento 4001, Almagro</span>
-          <a class="btn line sm" href="https://www.google.com/maps/search/?api=1&amp;query=La+Catedral+Club+Sarmiento+4001+Almagro" target="_blank" rel="noopener">Cómo llegar</a>
-        </div>
-      </article>
-      <article class="gig">
-        <img src="media/fl_caf8.jpg" alt="Flyer de Un cafecito con la Godoy del domingo 8" loading="lazy">
-        <div>
-          <span class="when">Domingo 8 de noviembre · 16 a 19 hs</span>
-          <b>Un cafecito con la Godoy</b>
-          <span>Mini-show, podés cantar con pistas o tu instrumento, bailamos todos los ritmos y hay taxi-dance. Un espacio para compartir y hacer amigos.</span>
-          <span class="where">Los Patricios · Av. Boedo 1993</span>
-          <span class="cost">Todo esto por $10.000 · Hay merienda, pizzas y empanadas</span>
-          <a class="btn wa sm" href="https://wa.me/5491130458877?text=Hola%20Mirta!%20Quiero%20reservar%20para%20Un%20cafecito%20con%20la%20Godoy%20del%20domingo%208." target="_blank" rel="noopener">Reservar por WhatsApp</a>
-        </div>
-      </article>
-      <article class="gig">
-        <img src="media/fl_cumple.jpg" alt="Flyer del cumpleaños de Hugo Figueroa y Génesis" loading="lazy">
-        <div>
-          <span class="when">Domingo 15 de noviembre · 16 a 19 hs</span>
-          <b>Un cafecito con la Godoy: ¡de cumple!</b>
-          <span>Festejamos el cumple de Hugo Figueroa y Génesis, con show, baile y torta.</span>
-          <span class="where">Los Patricios · Av. Boedo 1993</span>
-          <a class="btn wa sm" href="https://wa.me/5491130458877?text=Hola%20Mirta!%20Quiero%20reservar%20para%20el%20cafecito%20del%20domingo%2015,%20el%20cumple%20de%20Hugo%20y%20Génesis." target="_blank" rel="noopener">Reservar por WhatsApp</a>
-        </div>
-      </article>
-      <article class="gig">
-        <img src="media/fl_tangos.jpg" alt="Flyer de Tangos Apasionados en El Boliche de Roberto" loading="lazy">
-        <div>
-          <span class="when">Lunes 23 de noviembre · 23:30 hs (puntual)</span>
-          <b>Tangos Apasionados</b>
-          <span>Con Silvestre Moretta en guitarra y Joaquín Díaz Varela en bandoneón.</span>
-          <span class="where">El Boliche de Roberto · Bulnes 331, Almagro</span>
-          <a class="btn line sm" href="https://www.google.com/maps/search/?api=1&amp;query=El+Boliche+de+Roberto+Bulnes+331+Almagro" target="_blank" rel="noopener">Cómo llegar</a>
-        </div>
-      </article>
-    </div>
-  </section>
-
   <section data-rv aria-labelledby="bioT">
     <div class="bio">
       <img src="media/retrato.jpg" alt="Mirta Godoy cantando con micrófono en una calle de San Telmo" width="720" height="960" loading="lazy">
@@ -356,6 +299,57 @@ footer{padding-bottom:calc(84px + env(safe-area-inset-bottom,0px))!important}
         <p class="links">YouTube y Facebook: <b>Mirta Godoy Tango</b> · Instagram: <a href="https://www.instagram.com/mirta_godoy_tango/" target="_blank" rel="noopener">@mirta_godoy_tango</a></p>
       </div>
     </div>
+  </section>
+
+  <section data-rv id="agenda" aria-labelledby="agT">
+    <span class="kick">Venite a verme</span>
+    <h2 id="agT">Dónde canto</h2>
+    <p class="intro">¿Querés verla antes de contratarla? Venite a uno de sus shows.</p>
+    <p class="next" id="nextGig" hidden></p>
+    <div class="agenda">
+      <article class="gig" data-fin="2026-11-06T05:00:00-03:00">
+        <img src="media/flyer_cate.jpg" alt="Flyer del After de La Cate" loading="lazy">
+        <div>
+          <span class="when">Viernes 6 de noviembre · 2 am</span>
+          <b>After de La Cate</b>
+          <span>Mirta canta, con Silvestre Moretta en guitarra.</span>
+          <span class="where">La Catedral Club · Sarmiento 4001, Almagro</span>
+          <a class="btn line sm" href="https://www.google.com/maps/search/?api=1&amp;query=La+Catedral+Club+Sarmiento+4001+Almagro" target="_blank" rel="noopener">Cómo llegar</a>
+        </div>
+      </article>
+      <article class="gig" data-fin="2026-11-08T19:00:00-03:00">
+        <img src="media/fl_caf8.jpg" alt="Flyer de Un cafecito con la Godoy del domingo 8" loading="lazy">
+        <div>
+          <span class="when">Domingo 8 de noviembre · 16 a 19 hs</span>
+          <b>Un cafecito con la Godoy</b>
+          <span>Mini-show, podés cantar con pistas o tu instrumento, bailamos todos los ritmos y hay taxi-dance. Un espacio para compartir y hacer amigos.</span>
+          <span class="where">Los Patricios · Av. Boedo 1993</span>
+          <span class="cost">Todo esto por $10.000 · Hay merienda, pizzas y empanadas</span>
+          <a class="btn wa sm" href="https://wa.me/5491130458877?text=Hola%20Mirta!%20Quiero%20reservar%20para%20Un%20cafecito%20con%20la%20Godoy%20del%20domingo%208." target="_blank" rel="noopener">Reservar por WhatsApp</a>
+        </div>
+      </article>
+      <article class="gig" data-fin="2026-11-15T19:00:00-03:00">
+        <img src="media/fl_cumple.jpg" alt="Flyer del cumpleaños de Hugo Figueroa y Génesis" loading="lazy">
+        <div>
+          <span class="when">Domingo 15 de noviembre · 16 a 19 hs</span>
+          <b>Un cafecito con la Godoy: ¡de cumple!</b>
+          <span>Festejamos el cumple de Hugo Figueroa y Génesis, con show, baile y torta.</span>
+          <span class="where">Los Patricios · Av. Boedo 1993</span>
+          <a class="btn wa sm" href="https://wa.me/5491130458877?text=Hola%20Mirta!%20Quiero%20reservar%20para%20el%20cafecito%20del%20domingo%2015,%20el%20cumple%20de%20Hugo%20y%20Génesis." target="_blank" rel="noopener">Reservar por WhatsApp</a>
+        </div>
+      </article>
+      <article class="gig" data-fin="2026-11-24T02:00:00-03:00">
+        <img src="media/fl_tangos.jpg" alt="Flyer de Tangos Apasionados en El Boliche de Roberto" loading="lazy">
+        <div>
+          <span class="when">Lunes 23 de noviembre · 23:30 hs (puntual)</span>
+          <b>Tangos Apasionados</b>
+          <span>Con Silvestre Moretta en guitarra y Joaquín Díaz Varela en bandoneón.</span>
+          <span class="where">El Boliche de Roberto · Bulnes 331, Almagro</span>
+          <a class="btn line sm" href="https://www.google.com/maps/search/?api=1&amp;query=El+Boliche+de+Roberto+Bulnes+331+Almagro" target="_blank" rel="noopener">Cómo llegar</a>
+        </div>
+      </article>
+    </div>
+    <button class="btn line sm more" id="agMore" type="button" hidden>Ver todas las fechas</button>
   </section>
 
   <section data-rv class="contact" aria-labelledby="ctT">
@@ -428,20 +422,28 @@ if('IntersectionObserver' in window && !matchMedia('(prefers-reduced-motion: red
  rv.forEach(el=>{const r=el.getBoundingClientRect();if(r.top>innerHeight){el.classList.add('rv-wait');ro.observe(el)}});
 }
 
+// agenda: oculta fechas pasadas y muestra las 2 próximas
+(()=>{const now=Date.now(),cards=[...document.querySelectorAll('.gig[data-fin]')];
+ cards.forEach(c=>{if(new Date(c.dataset.fin).getTime()<now)c.remove()});
+ const vivas=[...document.querySelectorAll('.gig[data-fin]')];
+ if(!vivas.length){$('agenda').hidden=true;return}
+ vivas.forEach((c,i)=>{if(i>1)c.classList.add('later')});
+ const b=$('agMore');if(vivas.length>2){b.hidden=false;b.textContent=`Ver todas las fechas (${vivas.length})`;
+  b.onclick=()=>{document.querySelector('.agenda').classList.add('all');b.hidden=true}}})();
 // galería cargada desde el panel, agrupada
 (async()=>{try{
  const U='https://syxhetsgfcfjdazyyfhv.supabase.co',K='sb_publishable_0BClC2xOaNPiR2dVjX59kg_MbBKtFRz';
- const r=await fetch(U+'/rest/v1/media?select=tipo,titulo,evento,ruta&order=orden.desc,creado.asc&limit=60',{headers:{apikey:K}});
- if(!r.ok)return;const items=await r.json();if(!items.length)return;
+ let items=[];try{const r=await fetch(U+'/rest/v1/media?select=tipo,titulo,evento,ruta&order=orden.desc,creado.asc&limit=60',{headers:{apikey:K}});if(r.ok)items=await r.json()}catch(e){}
+ items.push({tipo:'video',titulo:'Así suena en vivo, con guitarra',evento:'',ruta:'media/envivo.mp4',local:true,poster:'media/poster.jpg'});
  // grupos: Colombia primero, después el resto
  const grupos=[{t:'Gira por Colombia',d:'Festivales y escenarios',f:m=>/colombia|medell/i.test((m.evento||'')+' '+(m.titulo||''))},{t:'Shows y milongas',d:'Bares, cafecitos y fiestas',f:()=>true}];
  const usados=new Set(),g=$('gal');
- grupos.forEach(gr=>{const lista=items.filter(m=>!usados.has(m)&&gr.f(m));if(!lista.length)return;lista.forEach(m=>usados.add(m));
+ grupos.forEach(gr=>{const lista=items.filter(m=>!usados.has(m)&&gr.f(m)).sort((a,b)=>(b.local?1:0)-(a.local?1:0));if(!lista.length)return;lista.forEach(m=>usados.add(m));
   const box=document.createElement('div');box.className='gal-grp';
   const h=document.createElement('h3');h.textContent=gr.t+' ';const sm=document.createElement('small');sm.textContent='· '+lista.length+(lista.length===1?' video':' videos');h.append(sm);
   const row=document.createElement('div');row.className='gal-row';
-  lista.forEach(m=>{const f=document.createElement('figure');const src=U+'/storage/v1/object/public/eventos/'+m.ruta;
-   if(m.tipo==='video'){const v=document.createElement('video');v.src=src+'#t=0.5';v.controls=true;v.playsInline=true;v.preload='metadata';v.setAttribute('aria-label',m.titulo||m.evento||'Video del show');
+  lista.forEach(m=>{const f=document.createElement('figure');const src=m.local?m.ruta:U+'/storage/v1/object/public/eventos/'+m.ruta;
+   if(m.tipo==='video'){const v=document.createElement('video');v.src=m.local?src:src+'#t=0.5';if(m.poster)v.poster=m.poster;v.controls=true;v.playsInline=true;v.preload='metadata';v.setAttribute('aria-label',m.titulo||m.evento||'Video del show');
     v.addEventListener('play',()=>{row.querySelectorAll('video').forEach(o=>{if(o!==v)o.pause()});if(!bgm.paused){bgm.pause();mb.setAttribute('aria-pressed','false');$('musicLbl').textContent='Música'}});f.append(v)}
    else{const i=document.createElement('img');i.src=src;i.loading='lazy';i.alt=m.titulo||m.evento||'Foto del show';f.append(i)}
    const t=(m.titulo||'').trim(),e=(m.evento||'').trim();

@@ -34,10 +34,17 @@ input:focus,select:focus,button:focus-visible{outline:2px solid var(--gold-hi);o
 .qi{display:grid;grid-template-columns:1fr auto;gap:4px 10px;font-size:14px;background:var(--bg);border-radius:10px;padding:10px 12px}
 .qi .bar{grid-column:1/-1;height:5px;border-radius:5px;background:var(--line);overflow:hidden}
 .qi .bar i{display:block;height:100%;width:0;background:var(--gold);transition:width .3s}
-.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:10px}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:12px}
 .it{background:var(--bg);border:1px solid var(--line);border-radius:14px;overflow:hidden;display:flex;flex-direction:column}
 .it img,.it video{width:100%;aspect-ratio:1/1;object-fit:cover;background:#000;display:block}
 .it div{padding:8px 10px;font-size:13px;display:flex;flex-direction:column;gap:4px;min-width:0}
+.it{position:relative}
+.it .num{position:absolute;top:8px;left:8px;z-index:2;min-width:30px;height:30px;padding:0 6px;border-radius:15px;background:var(--gold);color:#1A1208;font:700 15px var(--body);display:grid;place-items:center}
+.it input{font-size:14px;padding:9px 10px;border-radius:10px}
+.it .falta{font-style:normal;font-weight:700;font-size:12.5px;color:#1A1208;background:#F0A35A;border-radius:6px;padding:3px 8px;align-self:flex-start}
+.mini{font:700 13px var(--body);border:0;border-radius:8px;padding:8px;cursor:pointer;background:linear-gradient(180deg,var(--gold-hi),var(--gold));color:#1A1208}
+.mini.line{background:transparent;border:1px solid var(--line);color:var(--fg);font-weight:600}.mini:disabled{opacity:.4}
+.mv{display:flex;gap:6px!important;flex-direction:row!important;padding:0!important}.mv .mini{flex:1}
 .it b{font-size:14px;overflow-wrap:anywhere}.it span{color:var(--muted);overflow-wrap:anywhere}
 .del{font:600 13px var(--body);background:transparent;border:1px solid var(--line);color:#F2A3A3;border-radius:8px;padding:6px;cursor:pointer;margin-top:4px}
 a{color:var(--gold-hi)}
@@ -91,6 +98,7 @@ a{color:var(--gold-hi)}
 
     <section class="card">
       <div class="row"><h2 style="margin:0">Lo que ya está en la página</h2><span class="muted" id="count"></span></div>
+      <p class="muted">Están en el mismo orden que en la página. Podés corregir el título, el evento y moverlos con las flechas.</p>
       <div class="grid" id="grid"></div>
     </section>
   </div>
@@ -162,28 +170,44 @@ async function subir(files){
   cargar();
 }
 
-// Lista
+// Lista: mismo orden que en la página, con título editable y flechas para ordenar
+let LISTA=[];
+async function guardarOrden(){
+  const n=LISTA.length;
+  await Promise.all(LISTA.map((m,i)=>sb.from('media').update({orden:n-i}).eq('id',m.id)));
+}
 async function cargar(){
-  const {data,error}=await sb.from('media').select('*').order('creado',{ascending:false});
+  const {data,error}=await sb.from('media').select('*').order('orden',{ascending:false}).order('creado',{ascending:true});
   const g=$('grid');
   if(error){g.innerHTML='<p class="msg err">No se pudo cargar la galería.</p>';return}
-  $('count').textContent=data.length?`${data.length} ${data.length===1?'archivo':'archivos'}`:'';
+  LISTA=data;
+  const faltan=data.filter(m=>!(m.titulo||'').trim()).length;
+  $('count').textContent=data.length?`${data.length} ${data.length===1?'archivo':'archivos'}${faltan?` · ${faltan} sin título`:''}`:'';
   if(!data.length){g.innerHTML='<p class="muted">Todavía no hay fotos ni videos. Subí los primeros arriba.</p>';return}
   g.innerHTML='';
-  data.forEach(m=>{
+  data.forEach((m,idx)=>{
     const el=document.createElement('div');el.className='it';
     const media=m.tipo==='video'?document.createElement('video'):document.createElement('img');
-    media.src=pub(m.ruta);if(m.tipo==='video'){media.muted=true;media.preload='metadata';media.controls=true;media.playsInline=true}else{media.alt=m.titulo||m.evento||'Foto del show';media.loading='lazy'}
+    media.src=pub(m.ruta)+(m.tipo==='video'?'#t=0.5':'');if(m.tipo==='video'){media.muted=true;media.preload='metadata';media.controls=true;media.playsInline=true}else{media.alt=m.titulo||m.evento||'Foto del show';media.loading='lazy'}
+    const num=document.createElement('span');num.className='num';num.textContent=idx+1;
     const info=document.createElement('div');
-    const b=document.createElement('b');b.textContent=m.titulo||(m.tipo==='video'?'Video':'Foto');
-    const s=document.createElement('span');s.textContent=m.evento||'';
+    if(!(m.titulo||'').trim()){const w=document.createElement('em');w.className='falta';w.textContent='Falta el título';info.append(w)}
+    const t=document.createElement('input');t.value=m.titulo||'';t.placeholder='Título: canción o momento';t.setAttribute('aria-label','Título');
+    const e=document.createElement('input');e.value=m.evento||'';e.placeholder='Evento y lugar';e.setAttribute('aria-label','Evento');
+    const ok=document.createElement('button');ok.className='mini';ok.type='button';ok.textContent='Guardar';
+    ok.onclick=async()=>{ok.disabled=true;ok.textContent='Guardando…';const {error}=await sb.from('media').update({titulo:t.value.trim(),evento:e.value.trim()}).eq('id',m.id);ok.textContent=error?'No se pudo guardar':'¡Guardado!';setTimeout(cargar,700)};
+    const mv=document.createElement('div');mv.className='mv';
+    const up=document.createElement('button');up.type='button';up.className='mini line';up.textContent='↑ Antes';up.disabled=idx===0;
+    const dn=document.createElement('button');dn.type='button';dn.className='mini line';dn.textContent='↓ Después';dn.disabled=idx===data.length-1;
+    const mover=async d=>{const k=idx+d;[LISTA[idx],LISTA[k]]=[LISTA[k],LISTA[idx]];up.disabled=dn.disabled=true;await guardarOrden();cargar()};
+    up.onclick=()=>mover(-1);dn.onclick=()=>mover(1);mv.append(up,dn);
     const del=document.createElement('button');del.className='del';del.type='button';del.textContent='Sacar de la página';
     let armed=false;
     del.onclick=async()=>{
       if(!armed){armed=true;del.textContent='Tocá de nuevo para confirmar';setTimeout(()=>{armed=false;del.textContent='Sacar de la página'},4000);return}
       del.disabled=true;await sb.storage.from('eventos').remove([m.ruta]);await sb.from('media').delete().eq('id',m.id);cargar();
     };
-    info.append(b,s,del);el.append(media,info);g.append(el);
+    info.append(t,e,ok,mv,del);el.append(num,media,info);g.append(el);
   });
 }
 arrancar();
